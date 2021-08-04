@@ -42,7 +42,7 @@ void Screenemulator::draw(const std::string &color)
     {
         for (int j = 0; j < _hsize; ++j)
         {
-            if(screen[i][j]=='1')
+            if(screen[i][j]=='-')
             {
                 std::cout << color << screen[i][j];
             }
@@ -64,7 +64,8 @@ void Screenemulator::redraw(Wincl &wincl)
     {
         for (int j = wincl._y; j < wincl._hsize + wincl._y; ++j)
         {
-            screen[i][j] = wincl.fill;
+            if(!(i >= this->_vsize || j >= this->_hsize))
+                screen[i][j] = wincl.fill;
         }
     }
     draw(wincl.color);
@@ -72,6 +73,6 @@ void Screenemulator::redraw(Wincl &wincl)
 
 void Screenemulator::createWindow()
 {
-    wincl = new Wincl(15, 10);
+    wincl = new Wincl(_vsize/2, _hsize/2, 6, 25);
     redraw(*wincl);
 }
