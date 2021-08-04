@@ -1,5 +1,6 @@
 #include <iostream>
 #include "srcemul.h"
+#include "wincl.h"
 
 Screenemulator::Screenemulator(std::size_t vertical, std::size_t horizontal) : _vsize(vertical), _hsize(horizontal)
 {
@@ -13,7 +14,6 @@ Screenemulator::Screenemulator(std::size_t vertical, std::size_t horizontal) : _
     {
         for (int j = 0; j < _hsize; ++j)
         {
-
             screen[i][j] = ' ';
         }
     }
@@ -23,6 +23,7 @@ Screenemulator::Screenemulator(std::size_t vertical, std::size_t horizontal) : _
 
 Screenemulator::~Screenemulator()
 {
+    delete wincl;
 }
 
 void Screenemulator::clear()
@@ -34,15 +35,43 @@ void Screenemulator::clear()
 #endif
 }
 
-void Screenemulator::draw()
+void Screenemulator::draw(const std::string &color)
 {
     clear();
     for (int i = 0; i < _vsize; ++i)
     {
         for (int j = 0; j < _hsize; ++j)
         {
-            std::cout << "\x1b[44m" << screen[i][j];
+            if(screen[i][j]=='1')
+            {
+                std::cout << color << screen[i][j];
+            }
+            else
+            {
+                std::cout << "\x1b[44m" << screen[i][j];
+            }
+            
         }
         std::cout << "\x1b[0m" << std::endl;
     }
+}
+
+void Screenemulator::redraw(Wincl &wincl)
+{
+    screen = buff;
+    
+    for (int i = wincl._x; i < wincl._vsize+wincl._x; ++i)
+    {
+        for (int j = wincl._y; j < wincl._hsize + wincl._y; ++j)
+        {
+            screen[i][j] = wincl.fill;
+        }
+    }
+    draw(wincl.color);
+}
+
+void Screenemulator::createWindow()
+{
+    wincl = new Wincl(15, 10);
+    redraw(*wincl);
 }
