@@ -61,7 +61,7 @@ void Screenemulator::draw(const std::string &color)
 
 void Screenemulator::redraw(Wincl &wincl)
 {
-    screen = buff;
+   // screen = buff;
     
     for (int i = wincl._x; i < wincl._vsize+wincl._x; ++i)
     {
@@ -76,8 +76,16 @@ void Screenemulator::redraw(Wincl &wincl)
 
 void Screenemulator::createWindow()
 {
-    
-    Wincl* wincl = new Wincl(_vsize/2, _hsize/2, 6, 25);
+    Wincl* wincl;
+    if(windows.size() != 0)
+    {
+         wincl = new Wincl(_vsize/2+2, _hsize/2+2, 6, 25);
+    }
+    else
+    {
+         wincl = new Wincl(_vsize/2, _hsize/2, 6, 25);
+    }
+   
     std::size_t np = HWIdP++;
     wincl->setHwidp(np);
     wincl->setPriority(np);
