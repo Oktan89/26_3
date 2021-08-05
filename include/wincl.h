@@ -23,6 +23,7 @@ public:
     void setHwidp(const std::size_t hwidp);
     void setPriority(const std::size_t priority);
     std::size_t getPriority();
+    std::size_t getHWIdP();
     std::pair<std::size_t, std::size_t> getDot();
     void setFill(const char fill);
 };

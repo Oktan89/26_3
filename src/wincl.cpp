@@ -31,3 +31,8 @@ void Wincl::setFill(const char fill)
 {
     this->fill = fill;
 }
+
+std::size_t Wincl::getHWIdP()
+{
+    return _hwidp;
+}

@@ -15,11 +15,13 @@ class Screenemulator
     void clear();
     void draw();
     std::size_t allocation_of_priorities();
+    static bool winsort(Wincl* ws, Wincl* we);
 public:
     Screenemulator(std::size_t vertical = 50, std::size_t horizontal = 80);
     ~Screenemulator();
     void redraw(Wincl &wincl);
     void draw(Wincl &wincl);
     void createWindow();
+    void display(std::size_t hwidp = 0);
 
 };

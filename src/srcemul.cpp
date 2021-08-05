@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "srcemul.h"
 #include "wincl.h"
 
@@ -140,4 +141,37 @@ std::size_t Screenemulator::allocation_of_priorities()
         }
         return 0;
     }
+}
+
+bool Screenemulator::winsort(Wincl* ws, Wincl*we)
+{
+    std::size_t s = ws->getPriority();
+    std::size_t e = we->getPriority();
+    return s > e;
+}
+
+void Screenemulator::display(std::size_t hwidp)
+{
+    std::size_t position = 0;
+    for(int i = 0; i < windows.size(); ++i)
+    {
+        if(windows[i]->getHWIdP() == hwidp)
+        {
+            position = i;
+        }
+    }
+    std::size_t temp = windows[position]->getPriority();
+   
+    for(auto win : windows)
+    {
+        if(win->getPriority() == 0)
+        {
+            win->setPriority(temp);
+            windows[position]->setPriority(0);
+        }
+    }
+    std::sort(windows.begin(), windows.end(), winsort);
+    screen = buff;
+    for(const auto win : windows)
+        redraw(*win);
 }
