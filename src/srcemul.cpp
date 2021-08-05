@@ -2,6 +2,8 @@
 #include "srcemul.h"
 #include "wincl.h"
 
+std::size_t Screenemulator::HWIdP = 0;
+
 Screenemulator::Screenemulator(std::size_t vertical, std::size_t horizontal) : _vsize(vertical), _hsize(horizontal)
 {
     screen.resize(_vsize);
@@ -23,7 +25,8 @@ Screenemulator::Screenemulator(std::size_t vertical, std::size_t horizontal) : _
 
 Screenemulator::~Screenemulator()
 {
-    delete wincl;
+    for(auto &win : windows)
+        delete win;
 }
 
 void Screenemulator::clear()
@@ -73,6 +76,11 @@ void Screenemulator::redraw(Wincl &wincl)
 
 void Screenemulator::createWindow()
 {
-    wincl = new Wincl(_vsize/2, _hsize/2, 6, 25);
+    
+    Wincl* wincl = new Wincl(_vsize/2, _hsize/2, 6, 25);
+    std::size_t np = HWIdP++;
+    wincl->setHwidp(np);
+    wincl->setPriority(np);
+    windows.push_back(wincl);
     redraw(*wincl);
 }
