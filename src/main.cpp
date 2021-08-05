@@ -5,7 +5,12 @@ int main()
 {
     Screenemulator test(20, 80);
 
-    test.createWindow();
-    test.createWindow();
+    for(int i =0 ; i < 15; ++i)
+    {
+        test.createWindow();
+    }
+    
+ 
+     
     return 0; 
 }

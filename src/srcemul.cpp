@@ -25,7 +25,7 @@ Screenemulator::Screenemulator(std::size_t vertical, std::size_t horizontal) : _
 
 Screenemulator::~Screenemulator()
 {
-    for(auto &win : windows)
+    for (auto &win : windows)
         delete win;
 }
 
@@ -38,22 +38,34 @@ void Screenemulator::clear()
 #endif
 }
 
-void Screenemulator::draw(const std::string &color)
+void Screenemulator::draw()
 {
     clear();
     for (int i = 0; i < _vsize; ++i)
     {
         for (int j = 0; j < _hsize; ++j)
         {
-            if(screen[i][j]=='-')
+            std::cout << "\x1b[44m" << screen[i][j];
+        }
+        std::cout << "\x1b[0m" << std::endl;
+    }
+}
+
+void Screenemulator::draw(Wincl &wincl)
+{
+    clear();
+    for (int i = 0; i < _vsize; ++i)
+    {
+        for (int j = 0; j < _hsize; ++j)
+        {
+            if (screen[i][j] == wincl.fill)
             {
-                std::cout << color << screen[i][j];
+                std::cout << wincl.color << screen[i][j];
             }
             else
             {
                 std::cout << "\x1b[44m" << screen[i][j];
             }
-            
         }
         std::cout << "\x1b[0m" << std::endl;
     }
@@ -61,34 +73,71 @@ void Screenemulator::draw(const std::string &color)
 
 void Screenemulator::redraw(Wincl &wincl)
 {
-   // screen = buff;
-    
-    for (int i = wincl._x; i < wincl._vsize+wincl._x; ++i)
+
+    for (int i = wincl._x; i < wincl._vsize + wincl._x; ++i)
     {
         for (int j = wincl._y; j < wincl._hsize + wincl._y; ++j)
         {
-            if(!(i >= this->_vsize || j >= this->_hsize))
+            if (!(i >= this->_vsize || j >= this->_hsize))
                 screen[i][j] = wincl.fill;
         }
     }
-    draw(wincl.color);
+    draw(wincl);
 }
 
 void Screenemulator::createWindow()
 {
-    Wincl* wincl;
-    if(windows.size() != 0)
+    if(HWIdP == 10)
     {
-         wincl = new Wincl(_vsize/2+2, _hsize/2+2, 6, 25);
+        std::cout<<"I'm sorry but you can't create more than 9 windows"<<std::endl;
+        return;
+    }
+    Wincl *wincl;
+    if (windows.size() != 0)
+    {
+        for (auto w : windows)
+        {
+            if (w->getPriority() == 0)
+            {
+                auto res = w->getDot();
+                if(res.first + 1 >= _vsize)
+                {
+                    res.first = 0;
+                    res.second = 0;
+                }
+                wincl = new Wincl(res.first + 1, res.second + 1, 6, 25);
+                break;
+            }
+        }
     }
     else
     {
-         wincl = new Wincl(_vsize/2, _hsize/2, 6, 25);
+        wincl = new Wincl(_vsize / 2, _hsize / 2, 6, 25);
     }
-   
+
+
     std::size_t np = HWIdP++;
     wincl->setHwidp(np);
-    wincl->setPriority(np);
+    wincl->setPriority(allocation_of_priorities());
+    wincl->setFill(std::to_string(np)[0]);
     windows.push_back(wincl);
     redraw(*wincl);
+}
+
+std::size_t Screenemulator::allocation_of_priorities()
+{
+    if(windows.size() == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        
+        for(auto winp : windows)
+        {
+            std::size_t i = winp->getPriority();
+            winp->setPriority(++i);
+        }
+        return 0;
+    }
 }

@@ -13,13 +13,13 @@ class Screenemulator
     std::vector<Wincl *> windows;
     
     void clear();
-    void draw(const std::string &color = "\x1b[44m");
-    //Wincl* wincl = nullptr;
-    
+    void draw();
+    std::size_t allocation_of_priorities();
 public:
     Screenemulator(std::size_t vertical = 50, std::size_t horizontal = 80);
     ~Screenemulator();
     void redraw(Wincl &wincl);
+    void draw(Wincl &wincl);
     void createWindow();
 
 };
