@@ -171,7 +171,7 @@ void Screenemulator::display(std::size_t hwidp)
         }
     }
     std::sort(windows.begin(), windows.end(), winsort);
-    screen = buff;
+    
     for(const auto win : windows)
         redraw(*win);
 }
