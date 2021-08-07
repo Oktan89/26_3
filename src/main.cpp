@@ -1,28 +1,90 @@
 #include <iostream>
+#include <sstream>
 #include "srcemul.h"
 
 int main()
 {
-    Screenemulator test(20, 80);
+    Screenemulator win(20, 80);
 
-    for(int i =0 ; i < 4; ++i)
+    std::string answer;
+    std::stringstream enter;
+
+    while (true)
     {
-        test.createWindow();
-    }
-    int i, x ,y;
-    while(true)
-    {
-        std::cin>>i;
-        if(i == 10)
+        enter.str("");
+        enter.clear();
+        std::cout << "bash Windows ASCII : ";
+        std::getline(std::cin, answer);
+        enter << answer;
+        if (enter.fail())
+        {
+            enter.str("");
+            enter.clear();
+            continue;
+        }
+        std::string text;
+        enter >> text;
+        if (text == "exit")
+        {
+            std::cout << "Exit" << std::endl;
             return 0;
-
-       // test.display(i);
-        std::cout<<"Inpet x ,y:";
-        std::cin>>x>>y;
-        test.move(i, x, y);
-        i = 5;
-
+        }
+        else if (text == "create")
+        {
+            win.createWindow();
+            continue;
+        }
+        else if (text == "display")
+        {
+            std::size_t hwindp;
+            enter >> hwindp;
+            if (enter.fail())
+            {
+                win.display();
+            }
+            else
+            {
+                win.display(hwindp);
+            }
+            continue;
+        }
+        else if (text == "move")
+        {
+            std::size_t hwindp, x, y;
+            enter >> hwindp >> x >> y;
+            if (enter.fail())
+            {
+                win.draw();
+                std::cout << "Incorrect enter" << std::endl;
+                ;
+                continue;
+            }
+            else
+            {
+                win.move(hwindp, x, y);
+            }
+            continue;
+        }
+        else if (text == "resize")
+        {
+            std::size_t hwindp, vsize, hsize;
+            enter >> hwindp >> vsize >> hsize;
+            if (enter.fail())
+            {
+                win.draw();
+                std::cout << "Incorrect enter" << std::endl;
+                ;
+                continue;
+            }
+            else
+            {
+                win.resize(hwindp, vsize, hsize);
+            }
+            continue;
+        }
+        win.draw();
+        std::cout << "bash error: The command was not found" << std::endl;
     }
-     
-    return 0; 
+
+    return 0;
 }

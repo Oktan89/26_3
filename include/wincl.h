@@ -27,4 +27,5 @@ public:
     std::pair<std::size_t, std::size_t> getDot();
     void setFill(const char fill);
     void setDot(std::size_t x, std::size_t y);
+    void setResolut(std::size_t vsize, std::size_t hsize);
 };

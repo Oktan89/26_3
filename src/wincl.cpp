@@ -42,3 +42,9 @@ void Wincl::setDot(std::size_t x, std::size_t y)
     _x = y;
     _y = x;
 }
+
+void Wincl::setResolut(std::size_t vsize, std::size_t hsize)
+{
+    _vsize = vsize;
+    _hsize = hsize;
+}

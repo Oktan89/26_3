@@ -204,3 +204,30 @@ void Screenemulator::move(const std::size_t hwidp, std::size_t x, std::size_t y)
         display(hwidp);
     }
 }
+
+void Screenemulator::resize(const std::size_t hwidp, std::size_t vsize, std::size_t hsize)
+{
+    if(hsize >= _hsize || vsize >= _vsize)
+    {
+        std::cout<<"Error Window resolution"<<std::endl;
+        return;
+    }
+    else
+    {
+        if(hwidp > windows.size())
+        {
+            std::cout<<"Error number windows"<<std::endl;
+            return;
+        }
+        std::size_t position = 0;
+        for(std::size_t i = 0; i < windows.size(); ++i)
+        {
+            if(windows[i]->getHWIdP() == hwidp)
+            {
+                position = i;
+            }
+        }
+        windows[position]->setResolut(vsize, hsize);
+        display(hwidp);
+    }
+}
