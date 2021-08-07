@@ -22,6 +22,6 @@ public:
     void redraw(Wincl &wincl);
     void draw(Wincl &wincl);
     void createWindow();
-    void display(std::size_t hwidp = 0);
-
+    void display(const std::size_t hwidp = 0);
+    void move(const std::size_t hwidp, std::size_t x, std::size_t y);
 };

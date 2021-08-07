@@ -55,6 +55,7 @@ void Screenemulator::draw()
 void Screenemulator::draw(Wincl &wincl)
 {
     clear();
+    
     for (int i = 0; i < _vsize; ++i)
     {
         for (int j = 0; j < _hsize; ++j)
@@ -74,7 +75,7 @@ void Screenemulator::draw(Wincl &wincl)
 
 void Screenemulator::redraw(Wincl &wincl)
 {
-
+  
     for (int i = wincl._x; i < wincl._vsize + wincl._x; ++i)
     {
         for (int j = wincl._y; j < wincl._hsize + wincl._y; ++j)
@@ -150,12 +151,13 @@ bool Screenemulator::winsort(Wincl* ws, Wincl*we)
     return s > e;
 }
 
-void Screenemulator::display(std::size_t hwidp)
+void Screenemulator::display(const std::size_t hwidp)
 {
     std::size_t position = 0;
-    for(int i = 0; i < windows.size(); ++i)
+    for(std::size_t i = 0; i < windows.size(); ++i)
     {
-        if(windows[i]->getHWIdP() == hwidp)
+        std::size_t hw = windows[i]->getHWIdP();
+        if(hw == hwidp)
         {
             position = i;
         }
@@ -171,7 +173,34 @@ void Screenemulator::display(std::size_t hwidp)
         }
     }
     std::sort(windows.begin(), windows.end(), winsort);
-    
+    screen = buff;
     for(const auto win : windows)
         redraw(*win);
+}
+
+void Screenemulator::move(const std::size_t hwidp, std::size_t x, std::size_t y)
+{
+    if(x >= _hsize || y >= _vsize)
+    {
+        std::cout<<"Error Window coordinate"<<std::endl;
+        return;
+    }
+    else
+    {
+        if(hwidp > windows.size())
+        {
+            std::cout<<"Error number windows"<<std::endl;
+            return;
+        }
+        std::size_t position = 0;
+        for(std::size_t i = 0; i < windows.size(); ++i)
+        {
+            if(windows[i]->getHWIdP() == hwidp)
+            {
+                position = i;
+            }
+        }
+        windows[position]->setDot(x, y);
+        display(hwidp);
+    }
 }

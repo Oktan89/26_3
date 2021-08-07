@@ -26,4 +26,5 @@ public:
     std::size_t getHWIdP();
     std::pair<std::size_t, std::size_t> getDot();
     void setFill(const char fill);
+    void setDot(std::size_t x, std::size_t y);
 };

@@ -36,3 +36,9 @@ std::size_t Wincl::getHWIdP()
 {
     return _hwidp;
 }
+
+void Wincl::setDot(std::size_t x, std::size_t y)
+{
+    _x = y;
+    _y = x;
+}

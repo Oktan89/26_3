@@ -9,14 +9,18 @@ int main()
     {
         test.createWindow();
     }
-    int i;
+    int i, x ,y;
     while(true)
     {
         std::cin>>i;
         if(i == 10)
             return 0;
 
-        test.display(i);
+       // test.display(i);
+        std::cout<<"Inpet x ,y:";
+        std::cin>>x>>y;
+        test.move(i, x, y);
+        i = 5;
 
     }
      
